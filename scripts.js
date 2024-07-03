@@ -4,7 +4,7 @@ const PLAYFIELD_COLUMNS = 10;
 const PLAYFIELD_ROWS = 20;
 let playfield;
 
-const TEROMINO_NAMES = [
+const TETROMINO_NAMES = [
     'O',
     'L',
     'J',
@@ -14,7 +14,7 @@ const TEROMINO_NAMES = [
     'Z'
 ];
 
-const TEROMINOES = {
+const TETROMINOES = {
     'O' : [
         [1, 1],
         [1, 1]
@@ -58,32 +58,36 @@ let tetromino = {
     row: 0
 }
 
+// COMMON
+
 function convertPositionToIndex(row, col){
-    return row * PLAYFIELD_COLUMNS + col;
+    return row * PLAYFIELD_COLUMNS + col; 
 }
 
-function randomFigure(array) {
-    const randomIndex = Math.floor(Math.random() * array.length);
+function randomFigure(array){
+    const randomIndex = Math.floor(Math.random() * array.length );
     return array[randomIndex];
 }
 
+// GENERATION
 function generateTetromino(){
-    const nameTetro = randomFigure(TEROMINO_NAMES);
-    const matrix = TEROMINOES[nameTetro];
-
-    const columnnTetro = Math.floor(PLAYFIELD_COLUMNS/2 - matrix.length /2);  
-    const rowTetro = 5;
-
+    const nameTetro   = randomFigure(TETROMINO_NAMES);
+    const matrix      = TETROMINOES[nameTetro];
+    
+    const columnTetro = Math.floor( PLAYFIELD_COLUMNS / 2 - matrix.length / 2 )
+    const rowTetro    = 5;
+    
     tetromino = {
         name: nameTetro,
         matrix: matrix,
-        columnn: columnnTetro,
-        row: rowTetro
+        column: columnTetro,
+        row: rowTetro,
     }
 
 }
 
 function generatePlayfield(){
+
     for(let i = 0; i < PLAYFIELD_COLUMNS * PLAYFIELD_ROWS; i++ ){
         const div = document.createElement('div');
         document.querySelector('.tetris').append(div);
@@ -93,46 +97,53 @@ function generatePlayfield(){
                         .map( ()=> new Array(PLAYFIELD_COLUMNS).fill(0) )
 
     console.table(playfield)
-
 }
+
+// KEYBOARD
+
+document.addEventListener('keydown', onKeyDown)
 
 function onKeyDown(event){
-    console.log(event);
-    if (event.key ==  'ArrowLeft') {
-        tetromino.column -= 1;
-        if (isOutsideOfGamebord(tetromino.row, tetromino.column)) {
-            tetromino.column +=1;
-        }
-    }
-    if (event.key ==  'ArrowRight') {
-        tetromino.column += 1;
-        if (isOutsideOfGamebord(tetromino.row, tetromino.column)) {
-            tetromino.column -=1;
-        }
-    }
-    if (event.key ==  'ArrowDown') {
-        tetromino.row += 1;
-        if (isOutsideOfGamebord(tetromino.row, tetromino.column)) {
-            tetromino.row -=1;
-        }
-    }
-    draw();
-}
-
-function isOutsideOfGamebord(row, column) {
-    return column < 0 || 
-           column > PLAYFIELD_COLUMNS - tetromino.matrix.length || 
-           row + tetromino.matrix.length > PLAYFIELD_ROWS  - 1;
-
     
+    if(event.key == 'ArrowLeft'){
+        tetromino.column -= 1;
+        if(isOutsideOfGameboard(tetromino.row, tetromino.column)){
+            tetromino.column += 1;
+        }
+    }
+    if(event.key == 'ArrowRight'){
+        tetromino.column += 1;
+        if(isOutsideOfGameboard(tetromino.row, tetromino.column)){
+            tetromino.column -= 1;
+        }
+    }
+    if(event.key == 'ArrowDown'){
+        tetromino.row += 1;
+        if(isOutsideOfGameboard(tetromino.row, tetromino.column)){
+            tetromino.row -= 1;
+        }
+    }
+    draw()
 }
 
-function draw() {
+function draw(){
     drawPlayfield();
-    cells.forEach(el => el.removeAttribute('class'));
+    cells.forEach( el => el.removeAttribute('class') )
     drawTetromino();
-}  
+}
 
+// COLLISIONS
+
+function isOutsideOfGameboard(row, column){
+    console.log(row);
+    console.log(PLAYFIELD_ROWS - tetromino.matrix.length);
+    return  column < 0 || 
+            column > PLAYFIELD_COLUMNS - tetromino.matrix.length || 
+            row + tetromino.matrix.length > PLAYFIELD_ROWS  - 1;
+}
+
+
+// DRAW
 function drawTetromino(){
     const name = tetromino.name;
     const tetrominoMatrixSize = tetromino.matrix.length;
@@ -162,4 +173,5 @@ function drawPlayfield(){
 generatePlayfield()
 let cells = document.querySelectorAll('.tetris div');
 generateTetromino()
-draw()
+
+draw();
