@@ -118,19 +118,27 @@ function onKeyDown(event){
         togglePaused()
     }
 
-    if(event.key == 'ArrowUp'){
-        rotate()
+    if (!isPaused) {
+
+        if(event.key == ' '){
+            dropTetrominoDown()
+        }
+
+        if(event.key == 'ArrowUp'){
+            rotate()
+        }
+        
+        if(event.key == 'ArrowLeft'){
+            moveTetrominoLeft()
+        }
+        if(event.key == 'ArrowRight'){
+            moveTetrominoRight()
+        }
+        if(event.key == 'ArrowDown'){
+            moveTetrominoDown()
+        }
     }
     
-    if(event.key == 'ArrowLeft'){
-        moveTetrominoLeft()
-    }
-    if(event.key == 'ArrowRight'){
-        moveTetrominoRight()
-    }
-    if(event.key == 'ArrowDown'){
-        moveTetrominoDown()
-    }
     draw()
 }
 
@@ -158,6 +166,13 @@ function draw(){
     cells.forEach( el => el.removeAttribute('class') )
     drawPlayfield();
     drawTetromino();
+}
+
+function dropTetrominoDown() {
+    while (isValid()) {
+        tetromino.row++;
+    }
+    tetromino.row--;
 }
 
 function togglePaused() {
