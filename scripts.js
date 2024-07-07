@@ -3,6 +3,7 @@
 const PLAYFIELD_COLUMNS = 10;
 const PLAYFIELD_ROWS = 20;
 let playfield;
+let cells;
 
 const TETROMINO_NAMES = [
     'O',
@@ -60,6 +61,13 @@ let tetromino = {
 
 // COMMON
 
+function init() {
+    generatePlayfield()
+    cells = document.querySelectorAll('.tetris div');
+    generateTetromino()
+    moveDown()
+}
+
 function convertPositionToIndex(row, col){
     return row * PLAYFIELD_COLUMNS + col; 
 }
@@ -75,7 +83,7 @@ function generateTetromino(){
     const matrix      = TETROMINOES[nameTetro];
     
     const columnTetro = Math.floor( PLAYFIELD_COLUMNS / 2 - matrix.length / 2 )
-    const rowTetro    = 5;
+    const rowTetro    = -2;
     
     tetromino = {
         name: nameTetro,
@@ -191,6 +199,10 @@ function isValid() {
     return true;
 }
 
+function isOutsideOfTop(row) {
+    return tetromino.row + row < 0;
+}
+
 function isOutsideOfGameboard(row, column){
     return tetromino.matrix[row][column] &&
     (tetromino.row + row >= PLAYFIELD_ROWS || 
@@ -210,6 +222,7 @@ function drawTetromino(){
 
     for(let row = 0; row < tetrominoMatrixSize; row++){
         for(let column = 0; column < tetrominoMatrixSize; column++){
+            if (isOutsideOfTop(row)) { continue }
             if(!tetromino.matrix[row][column]){ continue }
             const cellIndex = convertPositionToIndex(tetromino.row + row, tetromino.column + column);
             cells[cellIndex].classList.add(name);
@@ -242,12 +255,14 @@ function placeTetromino() {
     generateTetromino()
 }
 
+function moveDown() {
+    moveTetrominoDown();
+    draw();
+    startLoop()
+}
 
+function startLoop() {
+    setTimeout( ()=> requestAnimationFrame(moveDown), 700)
+}
 
-generatePlayfield()
-let cells = document.querySelectorAll('.tetris div');
-generateTetromino()
-
-draw();
-
-//TODO 36:16
+init();
