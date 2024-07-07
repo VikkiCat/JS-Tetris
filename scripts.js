@@ -9,6 +9,8 @@ let timeId;
 let isGameOver = false;
 let overlay = document.querySelector('.overlay');
 let btnRestart = document.querySelector('.btn-restart');
+let scoreElement = document.querySelector('.score');
+let score = 0;
 
 const TETROMINO_NAMES = [
     'O',
@@ -67,6 +69,8 @@ let tetromino = {
 // COMMON
 
 function init() {
+    score = 0;
+    scoreElement.innerHTML = 0;
     isGameOver = false;
     generatePlayfield()
     cells = document.querySelectorAll('.tetris div');
@@ -284,6 +288,23 @@ function drawPlayfield(){
     }
 }
 
+function countScore(destroyRows) {
+    if (destroyRows == 1) {
+        score += 10;
+    }
+    if (destroyRows == 2) {
+        score += 20;
+    }
+    if (destroyRows == 3) {
+        score += 50;
+    }
+    if (destroyRows == 4) {
+        score += 100;
+    }
+
+    scoreElement.innerHTML = score;
+}
+
 function placeTetromino() {
     const tetrominoMatrixSize = tetromino.matrix.length; 
     for( let row = 0; row < tetrominoMatrixSize; row++ ){
@@ -300,6 +321,7 @@ function placeTetromino() {
     }
     let filledRows = findFilledRows();
     removeFillRow(filledRows);
+    countScore(filledRows.length);
     generateTetromino()
 }
 
