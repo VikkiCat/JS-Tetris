@@ -4,6 +4,7 @@ const PLAYFIELD_COLUMNS = 10;
 const PLAYFIELD_ROWS = 20;
 let playfield;
 let cells;
+let isPaused = false;
 
 const TETROMINO_NAMES = [
     'O',
@@ -113,6 +114,10 @@ document.addEventListener('keydown', onKeyDown)
 
 function onKeyDown(event){
 
+    if(event.key == 'Escape'){
+        togglePaused()
+    }
+
     if(event.key == 'ArrowUp'){
         rotate()
     }
@@ -153,6 +158,15 @@ function draw(){
     cells.forEach( el => el.removeAttribute('class') )
     drawPlayfield();
     drawTetromino();
+}
+
+function togglePaused() {
+    if (isPaused) {
+        startLoop()
+    } else {
+        stopLoop();
+    }
+    isPaused = !isPaused;
 }
 
 //ROTATE
@@ -258,11 +272,19 @@ function placeTetromino() {
 function moveDown() {
     moveTetrominoDown();
     draw();
+    stopLoop()
     startLoop()
 }
 
+let timeId;
+
 function startLoop() {
-    setTimeout( ()=> requestAnimationFrame(moveDown), 700)
+    timeId = setTimeout( ()=> requestAnimationFrame(moveDown), 700)
+}
+
+function stopLoop(params) {
+    clearTimeout(timeId);
+    timeId = null;
 }
 
 init();
