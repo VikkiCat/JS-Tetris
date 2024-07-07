@@ -16,6 +16,16 @@ body{
 
 }
 
+.score{
+    font-size: 80px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 50px;
+    border: 10px solid orange;
+    padding: 20px;
+    border-radius: 30px;
+    background: gold;
+}
+
 .tetris div{
     height: min(4vh, 7vw);
     width: min(4vh, 7vw);
