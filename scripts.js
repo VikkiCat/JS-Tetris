@@ -9,6 +9,7 @@ let timeId;
 let isGameOver = false;
 let overlay = document.querySelector('.overlay');
 let btnRestart = document.querySelector('.btn-restart');
+let btnRestartNow = document.querySelector('.btn-restart-now');
 let scoreElement = document.querySelector('.score');
 let score = 0;
 
@@ -119,13 +120,20 @@ function generatePlayfield(){
 
 // KEYBOARD
 
+//Restart
 btnRestart.addEventListener('click', function(){
     document.querySelector('.tetris').innerHTML = '';
     overlay.style.display = 'none';
 
     init();
 })
+btnRestartNow.addEventListener('click', function(){
+    document.querySelector('.tetris').innerHTML = '';
+    init();
+})
 
+
+//Navigation
 document.addEventListener('keydown', onKeyDown)
 
 function onKeyDown(event){
