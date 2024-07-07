@@ -166,6 +166,41 @@ function onKeyDown(event){
     draw()
 }
 
+const btnLeft =  document.querySelector('.arrow-left');
+btnLeft.addEventListener('click',function(){
+    moveTetrominoLeft()
+    draw()
+})
+
+const btnRight =  document.querySelector('.arrow-right');
+btnRight.addEventListener('click',function(){
+    moveTetrominoRight()
+    draw()
+})
+
+const btnUp =  document.querySelector('.arrow-up');
+btnUp.addEventListener('click',function(){
+    rotate()
+    draw()
+})
+
+const btnDown =  document.querySelector('.arrow-down');
+btnDown.addEventListener('click',function(){
+    moveTetrominoDown()
+    draw()
+})
+
+const btnDropDown =  document.querySelector('.drop-down');
+btnDropDown.addEventListener('click',function(){
+    dropTetrominoDown()
+    draw()
+})
+const btnPause =  document.querySelector('.btn-pause');
+btnPause.addEventListener('click',function(){
+    togglePaused()
+})
+
+
 function moveTetrominoDown(){
     tetromino.row += 1;
         if(!isValid()){
