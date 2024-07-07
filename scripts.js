@@ -5,6 +5,10 @@ const PLAYFIELD_ROWS = 20;
 let playfield;
 let cells;
 let isPaused = false;
+let timeId;
+let isGameOver = false;
+let overlay = document.querySelector('.overlay');
+let btnRestart = document.querySelector('.btn-restart');
 
 const TETROMINO_NAMES = [
     'O',
@@ -63,6 +67,7 @@ let tetromino = {
 // COMMON
 
 function init() {
+    isGameOver = false;
     generatePlayfield()
     cells = document.querySelectorAll('.tetris div');
     generateTetromino()
@@ -109,6 +114,13 @@ function generatePlayfield(){
 }
 
 // KEYBOARD
+
+btnRestart.addEventListener('click', function(){
+    document.querySelector('.tetris').innerHTML = '';
+    overlay.style.display = 'none';
+
+    init();
+})
 
 document.addEventListener('keydown', onKeyDown)
 
@@ -276,6 +288,11 @@ function placeTetromino() {
     const tetrominoMatrixSize = tetromino.matrix.length; 
     for( let row = 0; row < tetrominoMatrixSize; row++ ){
         for(let column = 0; column < tetrominoMatrixSize; column++){
+            if (isOutsideOfTop(row)) {
+                isGameOver = true;
+                overlay.style.display = 'flex';
+                return;
+            }
             if (tetromino.matrix[row][column]) {
                 playfield[tetromino.row+row][tetromino.column+column]  =  tetromino.name;
             }
@@ -290,8 +307,6 @@ function moveDown() {
     stopLoop()
     startLoop()
 }
-
-let timeId;
 
 function startLoop() {
     timeId = setTimeout( ()=> requestAnimationFrame(moveDown), 700)
