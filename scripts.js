@@ -127,6 +127,7 @@ btnRestart.addEventListener('click', function(){
 
     init();
 })
+
 btnRestartNow.addEventListener('click', function(){
     document.querySelector('.tetris').innerHTML = '';
     init();
@@ -365,6 +366,7 @@ function placeTetromino() {
     let filledRows = findFilledRows();
     removeFillRow(filledRows);
     countScore(filledRows.length);
+    finalScore = countScore(filledRows.length);
     generateTetromino()
 }
 
